@@ -17,7 +17,7 @@ class Personajes(Base):
     eye_color = Column(String(250), nullable=False)
     gender = Column(String(250), nullable=False)
     hair_color = Column(String(250), nullable=False)
-    favoritos = relationship('Favoritos', backref='personajes', lazy=True)
+    favoritosPersonajes = relationship('FavoritosPersonajes', backref='personajes', lazy=True)
 
 
 class Planetas(Base):
@@ -29,7 +29,7 @@ class Planetas(Base):
     diameter = Column(String(250),nullable=False)
     rotation_period = Column(String(250), nullable=False)
     orbital_period = Column(String(250), nullable=False)
-    favoritos = relationship('Favoritos', backref='planetas', lazy=True)
+    favoritosPlanetas = relationship('FavoritosPlanetas', backref='planetas', lazy=True)
     # person_id = Column(Integer, ForeignKey('person.id'))
     # person = relationship(Person)
 
@@ -40,7 +40,7 @@ class Vehiculos(Base):
     model = Column(String(250),nullable=False)
     vehicle_class = Column(String(250),nullable=False)
     length = Column(String(250),nullable=False)
-    favoritos = relationship('Favoritos', backref='vehiculos', lazy=True)
+    favoritosVehiculos = relationship('FavoritosVehiculos', backref='vehiculos', lazy=True)
 
 class Usuario(Base):
     __tablename__ = 'usuario'
@@ -48,15 +48,30 @@ class Usuario(Base):
     name = Column(String(250),nullable=False)
     email = Column(String(250),nullable=False)
     password = Column(String(250),nullable=False)
-    favoritos = relationship('Favoritos', backref='usuario', lazy=True)
+    favoritosUsuario = relationship('FavoritosUsuario', backref='usuario', lazy=True)
 
-class Favoritos(Base):
-    __tablename__ = 'favoritos'
+
+
+class FavoritosPersonajes(Base):
+    __tablename__ = 'favoritos_personajes'
+    id = Column(Integer,primary_key=True)    
+    personajes_id = Column(Integer, ForeignKey('personajes.id'))
+        
+class FavoritosPlanetas(Base):
+    __tablename__ = 'favoritos_planetas'
+    id = Column(Integer,primary_key=True)
+    planetas_id = Column(Integer, ForeignKey('planetas.id'))
+
+class FavoritosVehiculos(Base):
+    __tablename__ = 'favoritos_vehiculos'
+    id = Column(Integer,primary_key=True)
+    vehiculos_id = Column(Integer, ForeignKey('vehiculos.id'))
+
+class FavoritosUsuario(Base):
+    __tablename__ = 'favoritos_usuario'
     id = Column(Integer,primary_key=True)
     usuario_id = Column(Integer, ForeignKey('usuario.id'))
-    personajes_id = Column(Integer, ForeignKey('personajes.id'))
-    planetas_id = Column(Integer, ForeignKey('planetas.id'))
-    vehiculos_id = Column(Integer, ForeignKey('vehiculos.id'))
+
     
     
 
@@ -64,8 +79,8 @@ class Favoritos(Base):
 
 
 
-    def to_dict(self):
-        return {}
+def to_dict(self):
+    return {}
 
 ## Draw from SQLAlchemy base
 render_er(Base, 'diagram.png')
